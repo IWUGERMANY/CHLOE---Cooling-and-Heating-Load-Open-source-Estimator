@@ -1,30 +1,18 @@
-![CHLOE Logo](https://github.com/user-attachments/assets/fabbf2f5-8afe-41f1-9709-e97e958b6198)<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.0"
-   width="338.66mm"
-   height="190.50999mm"
-   id="svg157"
-   sodipodi:docname="Logo.svg"
-   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  </g>
-</svg>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/e1162cc9-0a1d-400f-b3a5-69342a511c9a">
+</div>
 
 
 
+# CHLOE - Cooling and Heating Load Open-source Estimator 
 
-# Lezbau Calc
-
-#### Create "virtualenv"
+#### Title 1
 
 ```bash
 virtualenv lezbaucalc
 ```
 
-#### Clone repository into created "lezbaucalc" directory
+#### Title 2
 
 ```bash
 cd lezbaucalc
@@ -48,16 +36,5 @@ git clone https://github.com/IWUGERMANY/lezbaudata .
 
 ```
 
-### Restore project requirements
-
-```
-pip install -r requirements.txt
-```
-
-### Run tests ... 
-
-```
-pytest
-```
 
 ### Done. 👏 
