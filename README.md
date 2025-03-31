@@ -4,37 +4,30 @@
 
 
 
-# CHLOE - Cooling and Heating Load Open-source Estimator 
+# CHLOE: Cooling and Heating Load Open-source Estimator
 
-#### Title 1
+**CHLOE** is a simplified Python-based tool that estimates heating and cooling loads with minimal user inputs. Designed for the early stages of building planning, it provides quick yet reasonably accurate load calculations for temperate climates, referencing established German standards and applying targeted simplifications.
 
-```bash
-virtualenv lezbaucalc
-```
+---
 
-#### Title 2
+## Overview
 
-```bash
-cd lezbaucalc
-git clone https://github.com/IWUGERMANY/lezbaudata .
-```
+Early-stage building design often requires a reliable, straightforward method for estimating heating and cooling loads. **CHLOE** (Cooling and Heating Load Open-source Estimator) fills this gap by:
 
-### Directory structure
+- Simplifying complex standard methodologies.  
+- Reducing extensive data requirements typically needed at advanced design stages.  
+- Delivering transparent and easily modifiable open-source code.  
 
-```
-.
-├── README.md
-├── bin
-├── docs
-├── lezbaucalc
-├── lib
-├── pyproject.toml
-├── pyvenv.cfg
-├── requirements.txt
-├── share
-└── tests
+CHLOE’s results show deviations of approximately **+16%** for heating loads and **–13%** for cooling loads compared to detailed standard methodologies. While it cannot fully handle complex geometries or advanced passive-cooling strategies, CHLOE provides sufficient accuracy for preliminary HVAC system sizing and energy demand analyses.
 
-```
+---
 
+## Features
 
-### Done. 👏 
+- **Quick Estimates**: Reduces the need for detailed building geometry or extensive material data.  
+- **Open-Source**: Code is freely available and can be customized for various project needs or climates.  
+- **Accessible Methodology**: Relies on simplified approaches, referencing standard methods while minimizing data inputs.  
+- **Heating & Cooling Loads**: Calculates both heating and cooling requirements in a single Python script.  
+- **Temperate Climates**: Optimized for temperate climate assumptions; can be adapted for other regions with caution.
+
+---
