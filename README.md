@@ -31,3 +31,7 @@ CHLOE’s results show deviations of approximately **+16%** for heating loads an
 - **Temperate Climates**: Optimized for temperate climate assumptions; can be adapted for other regions with caution.
 
 ---
+
+## Acknowledgements
+
+The present work was undertaken in the ENOB:LezBAU project. Funding code: Fkz.: 03EN1074A; funded by the Federal Ministry for Economic Affairs and Climate Action of Germany, in accordance with the parliamentary resolution of the German Parliament.
