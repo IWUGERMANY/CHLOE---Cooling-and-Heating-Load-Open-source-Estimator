@@ -35,3 +35,8 @@ CHLOE’s results show deviations of approximately **+16%** for heating loads an
 ## Acknowledgements
 
 The present work was undertaken in the ENOB:LezBAU project. Funding code: Fkz.: 03EN1074A; funded by the Federal Ministry for Economic Affairs and Climate Action of Germany, in accordance with the parliamentary resolution of the German Parliament.
+
+---
+ <a href="https://trackgit.com">
+<img src="https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/m8x1mhhlwv8e9t6fezm8" alt="trackgit-views" />
+</a>
