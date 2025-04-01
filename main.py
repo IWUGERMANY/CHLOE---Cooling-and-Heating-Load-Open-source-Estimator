@@ -282,7 +282,7 @@ class HeatingCoolingLoadCalculator:
 calculator = HeatingCoolingLoadCalculator()
 import openpyxl
 # Load the Excel workbook
-workbook = openpyxl.load_workbook('Inputs.xlsx')
+workbook = openpyxl.load_workbook('Exemplary_Inputs.xlsx')
 # Select the appropriate worksheet
 worksheet = workbook.active
 # Define the column name
