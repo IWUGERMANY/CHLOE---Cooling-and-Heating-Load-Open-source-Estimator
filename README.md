@@ -18,7 +18,7 @@ Early-stage building design often requires a reliable, straightforward method fo
 - Reducing extensive data requirements typically needed at advanced design stages.  
 - Delivering transparent and easily modifiable open-source code.  
 
-CHLOE’s results show deviations of approximately **+16%** for heating loads and **–13%** for cooling loads compared to detailed standard methodologies. While it cannot fully handle complex geometries or advanced passive-cooling strategies, CHLOE provides sufficient accuracy for preliminary HVAC system sizing and energy demand analyses.
+CHLOE’s results show reasonable deviations when compared to detailed standard methodologies. While it cannot fully handle complex geometries or advanced passive-cooling strategies, CHLOE provides sufficient accuracy for preliminary HVAC system sizing and energy demand analyses.
 
 ---
 
