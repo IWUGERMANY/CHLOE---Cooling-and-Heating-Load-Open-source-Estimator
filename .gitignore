@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 .pytest_cache/
 regression_results/
+
+# Packaging artifacts
+build/
+dist/
+*.egg-info/

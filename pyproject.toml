@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chloe-load-estimator"
+version = "0.2.0"
+description = "Cooling and Heating Load Open-source Estimator for early-stage building load calculations."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+  { name = "IWU Germany" }
+]
+keywords = [
+  "building-performance",
+  "heating-load",
+  "cooling-load",
+  "hvac",
+  "lezbau"
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering"
+]
+dependencies = []
+
+[project.optional-dependencies]
+excel = [
+  "openpyxl>=3.1"
+]
+dev = [
+  "build>=1.2",
+  "openpyxl>=3.1",
+  "pytest>=8"
+]
+
+[project.urls]
+Homepage = "https://github.com/IWUGERMANY/CHLOE---Cooling-and-Heating-Load-Open-source-Estimator"
+Repository = "https://github.com/IWUGERMANY/CHLOE---Cooling-and-Heating-Load-Open-source-Estimator"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
