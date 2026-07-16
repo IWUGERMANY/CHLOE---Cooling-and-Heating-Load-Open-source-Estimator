@@ -1,4 +1,17 @@
+"""Core heating and cooling load calculator for CHLOE."""
+
+from __future__ import annotations
+
+from .inputs import ChloeInput
+from .results import ChloeResult
+
+
 class HeatingCoolingLoadCalculator:
+    def calculate(self, chloe_input: "ChloeInput") -> "ChloeResult":
+        """Calculate heating and cooling loads from structured CHLOE input."""
+        self.heating_cooling_load(**chloe_input.__dict__)
+        return ChloeResult.from_calculator(self)
+
     def heating_cooling_load(
         self,
         net_floor_area: float,  # Net floor area [m^2]
@@ -271,80 +284,3 @@ class HeatingCoolingLoadCalculator:
         ) * share_cooled
         # Max Cooling load
         self.phi_cl: float = max(self.phi_cl_july, self.phi_cl_sept)
-
-
-
-
-############################################
-#### Import inputs from Inputs.xslx
-############################################
-
-calculator = HeatingCoolingLoadCalculator()
-import openpyxl
-# Load the Excel workbook
-workbook = openpyxl.load_workbook('Exemplary_Inputs.xlsx')
-# Select the appropriate worksheet
-worksheet = workbook.active
-# Define the column name
-column_name = 'B'
-# Read input parameters from the Excel file
-parameters = [
-    'net_floor_area', 'u_windows', 'u_walls', 'u_roof', 'u_base', 'temp_adj_base', 'temp_adj_walls_ug',
-    'temp_adj_roof', 'wall_area_og', 'wall_area_ug', 'total_window_area', 'roof_area', 'base_area',
-    't_set_heating', 'thermal_bridges_supplement', 'gross_building_vol', 'net_building_vol', 'reference_vol_name',
-    't_norm_ext_heating', 'heat_rec_vent', 'ach_min', 'ach_infl', 'ach_vent', 'share_heated', 'share_cooled',
-    'share_mech_ventilated', 't_norm_ext_cooling_july', 't_norm_ext_cooling_sept', 'gtot', 'share_glass_frame', 't_set_cooling',
-    't_set_cooling_max', 'phi_i_cooling_spec'
-]
-# Read the values from the Excel file
-input_values = {}
-for i, parameter in enumerate(parameters, start=2):
-    cell_value = worksheet[f'{column_name}{i}'].value
-    input_values[parameter] = cell_value
-# Call the heating_cooling_load method with the input parameters
-calculator.heating_cooling_load(**input_values)
-
-
-
-
-
-# Access the calculated heating load
-heating_cooling_load_result = round(calculator.phi_hl)
-heating_cooling_load_result2 = round(calculator.phi_v_tot_heating)
-heating_cooling_load_result3 = round(calculator.phi_solar_tot_july)
-heating_cooling_load_result4 = round(calculator.phi_t_cooling_july)
-heating_cooling_load_result5 = round(calculator.phi_v_tot_cooling_july)
-heating_cooling_load_result6 = round(calculator.phi_t_heating)
-heating_cooling_load_result7 = round(calculator.phi_cl)
-heating_cooling_load_result8 = round(calculator.phi_solar_tot_sept)
-heating_cooling_load_result9 = round(calculator.phi_t_cooling_sept)
-heating_cooling_load_result10 = round(calculator.phi_v_tot_cooling_sept)
-heating_cooling_load_result11 = round(calculator.phi_cl_july)
-heating_cooling_load_result12 = round(calculator.phi_cl_sept)
-heating_cooling_load_result13 = round(calculator.phi_i_cooling)
-
-
-# Print the result
-print(f"Results - Heating Load")
-print(f"Total Heating Load: {heating_cooling_load_result} W")
-print(f"Ventilation losses (heating): {heating_cooling_load_result2} W")
-print(f"Transmission losses (heating): {heating_cooling_load_result6} W")
-
-print(f" ")
-print(f"Results - Cooling Load")
-print(f"Total Cooling load: {heating_cooling_load_result7} W")
-print(f"Total Cooling load July: {heating_cooling_load_result11} W")
-print(f"Total Cooling load September: {heating_cooling_load_result12} W")
-print(f"-------------")
-print(f"Solar heat gains July (cooling): {heating_cooling_load_result3} W")
-print(f"Transmission heat gains July (cooling): {heating_cooling_load_result4} W")
-print(f"Ventilation heat gains July (cooling): {heating_cooling_load_result5} W")
-print(f"Internal gains (cooling): {heating_cooling_load_result13} W")
-print(f"-------------")
-print(f"Solar heat gains Sept (cooling): {heating_cooling_load_result8} W")
-print(f"Transmission heat gains Sept (cooling): {heating_cooling_load_result9} W")
-print(f"Ventilation heat gains Sept (cooling): {heating_cooling_load_result10} W")
-print(f"Internal gains (cooling): {heating_cooling_load_result13} W")
-print(f"-------------")
-
-

@@ -1,8 +1,8 @@
-"""Golden regression runner for CHLOE exemplary input.
+﻿"""Golden regression runner for CHLOE exemplary input.
 
-The script executes the current ``main.py`` with ``Exemplary_Inputs.xlsx`` and
-compares the calculated values against a golden CSV generated from the main
-branch.
+The script runs the package-level Excel helper with ``Exemplary_Inputs.xlsx`` and
+compares the calculated values against a golden CSV generated from the trusted
+baseline branch.
 
 Usage:
     python scripts/regression_chloe_golden.py --update-golden
@@ -12,12 +12,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import contextlib
 import csv
-import io
 import math
-import os
-import runpy
 import sys
 import time
 from dataclasses import dataclass
@@ -26,7 +22,9 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MAIN = REPO_ROOT / "main.py"
+SRC_ROOT = REPO_ROOT / "src"
+if SRC_ROOT.exists() and str(SRC_ROOT) not in sys.path:
+    sys.path.insert(0, str(SRC_ROOT))
 DEFAULT_INPUT = REPO_ROOT / "Exemplary_Inputs.xlsx"
 DEFAULT_GOLDEN = REPO_ROOT / "tests" / "golden" / "chloe_exemplary_outputs.csv"
 DEFAULT_COMPARISON = REPO_ROOT / "regression_results" / "chloe_exemplary_comparison.xlsx"
@@ -108,23 +106,43 @@ def _values_equal(golden: ResultRow, current: ResultRow, tolerance: float) -> tu
     return golden.value == current.value, "exact"
 
 
-def _run_main(main_path: Path, input_path: Path) -> tuple[dict[str, Any], str, float]:
-    if not main_path.exists():
-        raise FileNotFoundError(f"main.py not found: {main_path}")
+def _run_simulation(input_path: Path) -> tuple[dict[str, Any], float]:
     if not input_path.exists():
         raise FileNotFoundError(f"input file not found: {input_path}")
 
-    old_cwd = Path.cwd()
-    stdout = io.StringIO()
+    from chloe.excel_io import run_chloe
+
     start = time.perf_counter()
-    try:
-        os.chdir(main_path.parent)
-        with contextlib.redirect_stdout(stdout):
-            namespace = runpy.run_path(str(main_path), run_name="__chloe_regression__")
-    finally:
-        os.chdir(old_cwd)
+    result = run_chloe(str(input_path))
     elapsed = time.perf_counter() - start
-    return namespace, stdout.getvalue(), elapsed
+
+    namespace = {
+        "input_values": result.get("input_values"),
+        "calculator": result.get("calculator"),
+    }
+
+    rounded_outputs = result.get("rounded_outputs", {})
+    if isinstance(rounded_outputs, dict):
+        reverse_labels = {
+            "total_heating_load_w_rounded": "total_heating_load",
+            "ventilation_losses_heating_w_rounded": "ventilation_losses_heating",
+            "solar_heat_gains_july_cooling_w_rounded": "solar_heat_gains_july_cooling",
+            "transmission_heat_gains_july_cooling_w_rounded": "transmission_heat_gains_july_cooling",
+            "ventilation_heat_gains_july_cooling_w_rounded": "ventilation_heat_gains_july_cooling",
+            "transmission_losses_heating_w_rounded": "transmission_losses_heating",
+            "total_cooling_load_w_rounded": "total_cooling_load",
+            "solar_heat_gains_september_cooling_w_rounded": "solar_heat_gains_september_cooling",
+            "transmission_heat_gains_september_cooling_w_rounded": "transmission_heat_gains_september_cooling",
+            "ventilation_heat_gains_september_cooling_w_rounded": "ventilation_heat_gains_september_cooling",
+            "total_cooling_load_july_w_rounded": "total_cooling_load_july",
+            "total_cooling_load_september_w_rounded": "total_cooling_load_september",
+            "internal_gains_cooling_w_rounded": "internal_gains_cooling",
+        }
+        for variable_name, output_key in PRINTED_RESULT_LABELS.items():
+            result_key = reverse_labels[output_key]
+            if result_key in rounded_outputs:
+                namespace[variable_name] = rounded_outputs[result_key]
+    return namespace, elapsed
 
 
 def _collect_results(namespace: dict[str, Any]) -> list[ResultRow]:
@@ -149,7 +167,7 @@ def _collect_results(namespace: dict[str, Any]) -> list[ResultRow]:
             rows.append(ResultRow("rounded_output", output_key, value, value_type))
 
     if not rows:
-        raise RuntimeError("No CHLOE results collected from main.py namespace.")
+        raise RuntimeError("No CHLOE results collected from package regression output.")
     return rows
 
 
@@ -259,22 +277,18 @@ def _write_comparison(path: Path, golden_rows: list[ResultRow], current_rows: li
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run CHLOE golden regression.")
     parser.add_argument("--update-golden", action="store_true", help="Write the current output as golden reference.")
-    parser.add_argument("--main", type=Path, default=DEFAULT_MAIN, help="Path to CHLOE main.py.")
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT, help="Path to Exemplary_Inputs.xlsx.")
     parser.add_argument("--golden", type=Path, default=DEFAULT_GOLDEN, help="Golden CSV path.")
     parser.add_argument("--comparison", type=Path, default=DEFAULT_COMPARISON, help="Comparison report path.")
     parser.add_argument("--tolerance", type=float, default=1e-9, help="Numeric comparison tolerance.")
-    parser.add_argument("--show-main-output", action="store_true", help="Print captured main.py output.")
     return parser.parse_args()
 
 
 def main() -> int:
     args = _parse_args()
-    namespace, captured_stdout, elapsed_s = _run_main(args.main, args.input)
+    namespace, elapsed_s = _run_simulation(args.input)
     current_rows = _collect_results(namespace)
 
-    if args.show_main_output:
-        print(captured_stdout.rstrip())
 
     if args.update_golden:
         _write_csv(args.golden, current_rows)
@@ -307,3 +321,6 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+

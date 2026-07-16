@@ -1,16 +1,16 @@
-# CHLOE Golden Regression
+﻿# CHLOE Golden Regression
 
 This regression script protects the current CHLOE behavior for
 `Exemplary_Inputs.xlsx`.
 
-The current `main.py` executes calculation logic at module level and prints the
-results. The script therefore runs `main.py` in a controlled context, captures the
-calculated globals and the `calculator.__dict__`, and compares them with a golden
-CSV generated from the `main` branch.
+The script uses the package-level Excel helper in `chloe.excel_io`, collects the
+calculated `calculator.__dict__`, the loaded input values, and the rounded output
+values, then compares them with a golden CSV generated from the trusted baseline
+branch.
 
 ## Initial Golden Creation
 
-Run this once on the current trusted `main` branch:
+Run this once on the trusted baseline branch:
 
 ```powershell
 cd "C:\Users\wail\Desktop\Projects\CHLOE---Cooling-and-Heating-Load-Open-source-Estimator"
@@ -50,15 +50,14 @@ If `openpyxl` is unavailable, the comparison report is written as CSV instead.
 
 ## What Is Compared
 
-- Excel input values loaded by `main.py`.
+- Excel input values loaded by `chloe.excel_io.read_input_values(...)`.
 - All calculated attributes stored on `calculator.__dict__`.
-- Rounded output values that are currently printed by `main.py`.
+- Rounded output values produced by `chloe.excel_io.build_rounded_outputs(...)`.
 
 Numeric values are compared with a default tolerance of `1e-9`.
 
 ## Notes
 
-This script does not change CHLOE formulas. It is intentionally compatible with
-the current `main.py` structure. A later cleanup can move CHLOE execution into a
-function such as `run_chloe(input_path)`, but that is not required for the first
-regression safety net.
+This script does not change CHLOE formulas. It intentionally keeps Excel isolated
+as a regression/example path. Productive integrations such as Lezbau should use
+`from chloe import ChloeInput, run_chloe_simulation` instead.
