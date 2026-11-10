@@ -8,6 +8,8 @@
 
 **CHLOE** is a simplified Python-based tool that estimates heating and cooling loads with minimal user inputs. Designed for the early stages of building planning, it provides quick yet reasonably accurate load calculations for temperate climates, referencing established German standards and applying targeted simplifications.
 
+https://www.researchgate.net/publication/409469233_Development_of_an_open-source_cooling_and_heating_load_estimator_for_early_building_planning
+
 ---
 
 ## Overview
